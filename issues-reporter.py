@@ -33,10 +33,6 @@ def write_issues(result):
     if not result.status_code == 200:
         raise Exception(result.status_code)
     for issue in result.json()['items']:
-        if not issue['body']:
-            body = ''
-        else:
-            body = issue['body'].encode('utf-8')
         if not issue['title']:
             title = ''
         else:
@@ -45,8 +41,7 @@ def write_issues(result):
         csv_out.writerow(
             [issue['closed_at'],
              issue['number'],
-             title,
-             body])
+             title])
 
 
 def get_pages(headers):
@@ -76,7 +71,7 @@ print '_____________________________________________________________' \
 csv_file = '{repo}-issues.csv'.format(repo=repo.replace('/', '-'))
 csv_out = csv.writer(open(csv_file, 'wb'))
 csv_out.writerow(
-    ('Date Closed', 'Ticket Number', 'Title', 'Description'))
+    ('Date Closed', 'Ticket Number', 'Description'))
 write_issues(response)
 
 # If there is another page for the result, go there.
